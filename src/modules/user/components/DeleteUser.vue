@@ -20,7 +20,7 @@
       ¿Estás seguro de que deseas eliminar este usuario?
     </h3>
 
-    <CustomButton variant="secondary" @click="eventStore.emit('user-end-deleting')"
+    <CustomButton variant="secondary" class="me-2" @click="eventStore.emit('user-end-deleting')"
       >Cancelar</CustomButton
     >
     <CustomButton variant="danger" :loading="userDeleteMutation.isPending.value" @click="onDelete"

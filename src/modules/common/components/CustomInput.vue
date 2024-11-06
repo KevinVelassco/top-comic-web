@@ -1,14 +1,15 @@
 <template>
   <div>
-    <label :for="id" v-if="label?.trim()" class="block mb-2 text-gray-900">{{ label }}</label>
+    <label :for="id" v-if="label?.trim()" class="block mb-1.5 text-gray-900">{{ label }}</label>
 
     <input
       :id="id"
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
+      :disabled="disabled"
       :class="[
-        'appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none',
+        'appearance-none border rounded-md w-full py-2 px-3 text-gray-900 focus:outline-none border-gray-300 focus:ring-blue-500 focus:border-blue-500',
         { 'border-red-600 border-2': error },
       ]"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement)?.value ?? '')"
@@ -30,9 +31,10 @@ interface Props {
   id?: string;
   modelValue?: string | number;
   error?: string;
-  type?: 'text' | 'number';
+  type?: 'text' | 'number' | 'password';
   label?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

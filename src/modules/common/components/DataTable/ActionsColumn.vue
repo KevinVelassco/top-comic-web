@@ -1,11 +1,10 @@
 <template>
-  <div class="flex gap-2">
-    <!--  <span class="flex gap-2" @click.prevent="handleClick(actions.eventName, row)"> -->
+  <div class="flex items-center gap-2">
     <span
       v-for="action in actions"
       :key="action.key"
       :class="action.class"
-      @click.prevent="emitAction(action.eventName, record)"
+      @click.prevent="emitAction(action.eventName, record, $event)"
     >
       <EditIcon class="icon" v-if="action.key === 'editRecord'" />
       <DeleteIcon class="icon" v-if="action.key === 'deleteRecord'" />
@@ -34,7 +33,9 @@ const props = defineProps<Props>();
 
 const eventStore = useEventStore();
 
-const emitAction = (eventName: string, record: Record) => {
+const emitAction = (eventName: string, record: Record, event: MouseEvent) => {
+  event.stopPropagation();
+
   if (!eventName) return;
 
   const uniqueEventName = `${props.tableId}-${eventName}`;
@@ -45,6 +46,6 @@ const emitAction = (eventName: string, record: Record) => {
 
 <style scoped>
 .icon {
-  @apply cursor-pointer opacity-85 hover:opacity-100 transform transition-transform duration-150 active:scale-95;
+  @apply cursor-pointer opacity-75 hover:opacity-100;
 }
 </style>

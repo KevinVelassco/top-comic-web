@@ -1,15 +1,19 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router';
 
 import DashboardLayout from '@/modules/dashboard/layouts/DashboardLayout.vue';
-import HomeView from '@/modules/dashboard/views/HomeView.vue';
 import { authRoutes } from '@/modules/auth/routes';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { userRoutes } from '@/modules/user/routes';
+import NotFound404 from '@/modules/common/views/NotFound404.vue';
+import { comicRoutes } from '@/modules/comic/routes';
+import { chapterRoutes } from '@/modules/chapter/routes';
 
 declare module 'vue-router' {
   interface RouteMeta {
     isPublic?: boolean;
     requiresUnauthenticated?: boolean;
+    toRoute?: RouteLocationNormalized;
+    fromRoute?: RouteLocationNormalized;
   }
 }
 
@@ -20,18 +24,16 @@ const router = createRouter({
       path: '/',
       name: 'dashboard',
       component: DashboardLayout,
-      children: [
-        {
-          path: '',
-          name: 'home',
-          component: HomeView,
-        },
-
-        userRoutes,
-      ],
+      children: [...comicRoutes, userRoutes, chapterRoutes],
     },
 
     authRoutes,
+
+    {
+      path: '/:pathMatch(.*)*',
+      component: NotFound404,
+      meta: { isPublic: true },
+    },
   ],
 });
 
@@ -52,6 +54,9 @@ router.beforeEach(async (to, from, next) => {
   } else if (requiresUnauthenticated(to) && authStore.isAuthenticated) {
     if (to.name !== 'dashboard') return next({ name: 'dashboard' });
   }
+
+  to.meta.toRoute = to;
+  to.meta.fromRoute = from;
 
   next();
 });

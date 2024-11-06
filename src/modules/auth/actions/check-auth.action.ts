@@ -1,4 +1,4 @@
-import { tesloApi } from '@/api/tesloApi';
+import { comicApi } from '@/api/comicApi';
 import type { AuthResponse, User } from '../interfaces';
 import { isAxiosError } from 'axios';
 
@@ -18,7 +18,7 @@ export const checkAuthAction = async (): Promise<CheckError | CheckSuccess> => {
 
     if (!localToken) return { ok: false };
 
-    const { data } = await tesloApi.post<AuthResponse>('/auth/check-auth-status');
+    const { data } = await comicApi.post<AuthResponse>('/auth/check-auth-status');
 
     return {
       ok: true,

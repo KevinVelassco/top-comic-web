@@ -1,7 +1,7 @@
 <template>
   <NavBar @toggle-sidebar="toggleSidebar" />
 
-  <div class="p-5">
+  <div class="p-2 sm:p-5 pt-20 sm:pt-20 h-screen min-h-screen bg-stone-950">
     <RouterView />
   </div>
 

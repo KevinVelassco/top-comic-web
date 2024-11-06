@@ -13,18 +13,20 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await loginAction(email, password);
-      if (!response.ok) return logout();
+      const response = await loginAction({ email, password });
 
       authStatus.value = AuthStatus.Authenticated;
       user.value = response.user;
-      token.value = response.token;
+      token.value = response.access_token;
 
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.access_token);
 
-      return true;
+      return {
+        ok: true,
+      };
     } catch (error) {
-      return logout();
+      logout();
+      return { ok: false, error };
     }
   };
 
@@ -61,30 +63,23 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await registerAction(registerUserInput);
 
-      if (!response.ok) {
-        logout();
-        return { ok: false, message: response.message };
-      }
-
       authStatus.value = AuthStatus.Authenticated;
       user.value = response.user;
-      token.value = response.token;
+      token.value = response.access_token;
 
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.access_token);
 
       return {
         ok: true,
-        message: '',
       };
     } catch (error) {
-      return {
-        ok: false,
-        message: 'Error al registrar el usuario',
-      };
+      logout();
+      return { ok: false, error };
     }
   };
 
   return {
+    //Properties
     user,
     token,
     authStatus,
@@ -94,6 +89,8 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated: computed(() => authStatus.value === AuthStatus.Authenticated),
     isAdmin: computed(() => user.value?.isAdmin ?? false),
     username: computed(() => user.value?.name + ' ' + user.value?.lastName),
+
+    //Methods
     login,
     logout,
     register,

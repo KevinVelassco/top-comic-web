@@ -3,7 +3,7 @@
     :width="`${size}px`"
     :height="`${size}px`"
     aria-hidden="true"
-    :class="['text-gray-200 animate-spin fill-blue-600', style]"
+    :class="['text-gray-200 animate-spin fill-red-600', style]"
     viewBox="0 0 100 101"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

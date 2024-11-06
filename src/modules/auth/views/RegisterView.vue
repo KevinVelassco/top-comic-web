@@ -1,47 +1,71 @@
 <template>
-  <div class="card w-96 bg-base-100 shadow-xl">
-    <div class="card-body">
-      <h2 class="card-title">Crea tu cuenta</h2>
+  <div
+    class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-xl shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
+  >
+    <form class="space-y-6" @submit.prevent="onRegister">
+      <h5 class="text-2xl font-semibold text-gray-900 dark:text-white text-center">
+        Crea tu cuenta
+      </h5>
 
-      <form @submit.prevent="onRegister">
-        <div class="mb-4">
-          <label class="block mb-2 text-gray-700">Nombre</label>
-          <CustomInput v-model="name" v-bind="nameAttrs" :error="errors.name" />
-        </div>
+      <div class="text-center text-sm font-medium text-gray-500 dark:text-gray-300">
+        ¿Ya tienes una cuenta?
 
-        <div class="mb-4">
-          <label class="block mb-2 text-gray-700">Apellido</label>
-          <CustomInput v-model="lastName" v-bind="lastNameAttrs" :error="errors.lastName" />
-        </div>
-
-        <div class="mb-4">
-          <label class="block mb-2 text-gray-700">Correo electrónico</label>
-          <CustomInput v-model="email" v-bind="emailAttrs" :error="errors.email" />
-        </div>
-
-        <div class="mb-4">
-          <label class="block mb-2 text-gray-700">Contraseña</label>
-          <CustomInput v-model="password" v-bind="passwordAttrs" :error="errors.password" />
-        </div>
-
-        <div class="card-actions justify-center">
-          <CustomButton
-            type="submit"
-            variant="primary"
-            :loading="meta.valid && isSubmitting"
-            :disabled="meta.valid && isSubmitting"
-            >Crear cuenta</CustomButton
-          >
-        </div>
-      </form>
-
-      <div class="mt-5">
-        <span class="me-1">¿Ya tienes una cuenta?</span>
-        <RouterLink :to="{ name: 'login' }" class="link link-hover font-semibold"
-          >Inicia sesión
-        </RouterLink>
+        <RouterLink
+          :to="{ name: 'login' }"
+          class="text-blue-600 decoration-2 hover:underline dark:text-blue-500"
+          >Inicia sesión</RouterLink
+        >
       </div>
-    </div>
+
+      <div>
+        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >Nombre</label
+        >
+        <CustomInput id="name" v-model="name" v-bind="nameAttrs" :error="errors.name" />
+      </div>
+
+      <div>
+        <label for="lastName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >Apellido</label
+        >
+        <CustomInput
+          id="lastName"
+          v-model="lastName"
+          v-bind="lastNameAttrs"
+          :error="errors.lastName"
+        />
+      </div>
+      <div>
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >Correo Electronico</label
+        >
+
+        <CustomInput id="email" v-model="email" v-bind="emailAttrs" :error="errors.email" />
+      </div>
+      <div>
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >Contraseña</label
+        >
+        <CustomInput
+          type="password"
+          id="password"
+          v-model="password"
+          v-bind="passwordAttrs"
+          :error="errors.password"
+        />
+      </div>
+
+      <CustomButton
+        type="submit"
+        class="w-full"
+        variant="primary"
+        :loading="meta.valid && isSubmitting"
+        :disabled="meta.valid && isSubmitting"
+        >Crear cuenta</CustomButton
+      >
+
+      <CustomErrorMessage :error="error" />
+    </form>
   </div>
 </template>
 
@@ -55,9 +79,12 @@ import { registerUserSchema } from '../schemas/register-user.schema';
 
 import CustomInput from '@/modules/common/components/CustomInput.vue';
 import CustomButton from '@/modules/common/components/CustomButton.vue';
+import CustomErrorMessage from '@/modules/common/components/CustomErrorMessage.vue';
+import { ref } from 'vue';
 
 const authStore = useAuthStore();
 const toast = useToast();
+const error = ref();
 
 const { defineField, errors, handleSubmit, isSubmitting, meta } = useForm({
   validationSchema: toTypedSchema(registerUserSchema),
@@ -75,10 +102,10 @@ const [email, emailAttrs] = defineField('email');
 const [password, passwordAttrs] = defineField('password');
 
 const onRegister = handleSubmit(async (value) => {
-  const { ok, message } = await authStore.register(value);
+  const response = await authStore.register(value);
 
-  if (ok) return toast.info('Usuario registrado.');
+  if (response.ok) return toast.info('Usuario registrado.');
 
-  toast.error(message);
+  error.value = response.error;
 });
 </script>

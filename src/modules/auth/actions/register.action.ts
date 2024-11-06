@@ -1,17 +1,6 @@
-import { tesloApi } from '@/api/tesloApi';
-import type { AuthResponse, User } from '../interfaces';
-import { isAxiosError } from 'axios';
-
-interface RegisterError {
-  ok: false;
-  message: string;
-}
-
-interface RegisterSuccess {
-  ok: true;
-  user: User;
-  token: string;
-}
+import { comicApi } from '@/api/comicApi';
+import type { AuthResponse } from '../interfaces';
+import { getMessageFromError } from '@/modules/common/helpers';
 
 export interface RegisterUserInput {
   name: string;
@@ -22,24 +11,12 @@ export interface RegisterUserInput {
 
 export const registerAction = async (
   registerUserInput: RegisterUserInput,
-): Promise<RegisterError | RegisterSuccess> => {
+): Promise<AuthResponse> => {
   try {
-    const { data } = await tesloApi.post<AuthResponse>('/auth/register', registerUserInput);
+    const { data } = await comicApi.post<AuthResponse>('/auth/register', registerUserInput);
 
-    return {
-      ok: true,
-      user: data.user,
-      token: data.access_token,
-    };
+    return data;
   } catch (error) {
-    if (isAxiosError(error)) {
-      return {
-        ok: false,
-        message: 'No se pudo crear el usuario',
-      };
-    }
-
-    console.log(error);
-    throw new Error('No se pudo realizar la petición');
+    throw getMessageFromError(error);
   }
 };

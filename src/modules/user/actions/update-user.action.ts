@@ -1,4 +1,4 @@
-import { tesloApi } from '@/api/tesloApi';
+import { comicApi } from '@/api/comicApi';
 import type { User } from '@/modules/auth/interfaces';
 import { getMessageFromError } from '@/modules/common/helpers';
 
@@ -12,7 +12,7 @@ export const updateUserAction = async (updateUserInput: UpdateUserInput): Promis
   try {
     const { userId, ...rest } = updateUserInput;
 
-    const { data } = await tesloApi.patch<User>(`/user/${userId}`, rest);
+    const { data } = await comicApi.patch<User>(`/user/${userId}`, rest);
 
     return data;
   } catch (error) {

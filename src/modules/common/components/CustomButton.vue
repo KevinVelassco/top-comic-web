@@ -2,7 +2,7 @@
   <button
     :type="type"
     :class="[
-      'disabled:opacity-70 disabled:cursor-not-allowed font-medium text-center me-2 inline-flex items-center transform transition-transform duration-150',
+      'disabled:opacity-70 disabled:cursor-not-allowed font-medium text-center items-center transform transition-transform duration-150',
       props.variant !== undefined ? 'rounded-lg text-sm px-5 py-2.5' : '',
       buttonStyle,
       disabled ? '' : 'active:scale-95',
@@ -10,8 +10,10 @@
     @click="handleClick"
     :disabled="disabled"
   >
-    <LoadingIcon v-if="loading" class="me-2 fill-white" />
-    <slot></slot>
+    <div class="flex justify-center">
+      <LoadingIcon v-if="loading" class="me-2 fill-white" />
+      <slot></slot>
+    </div>
   </button>
 </template>
 
@@ -53,7 +55,7 @@ const handleClick = async (event: any) => {
 }
 
 .secondary {
-  @apply text-gray-900 bg-white disabled:hover:bg-white hover:bg-gray-200 border border-gray-200;
+  @apply text-gray-900 bg-white disabled:hover:bg-white hover:bg-gray-50 border border-gray-200;
 }
 
 .success {

@@ -1,8 +1,6 @@
 <template>
   <div
     v-if="open"
-    tabindex="-1"
-    aria-hidden="true"
     class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
   >
     <div class="relative sm:p-4 p-2 w-full max-w-xl max-h-full">

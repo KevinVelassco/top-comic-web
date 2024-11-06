@@ -1,15 +1,22 @@
-import { tesloApi } from '@/api/tesloApi';
+import { comicApi } from '@/api/comicApi';
 import type { UsersResponse } from '@/modules/auth/interfaces/users.response';
 
-export const getUsersAction = async (
-  page: number = 1,
-  limit: number = 5,
-): Promise<UsersResponse> => {
+interface GetUsersInput {
+  page?: number;
+  limit?: number;
+  q?: string;
+  filters?: Record<string, any>;
+}
+
+export const getUsersAction = async (getUsersInput?: GetUsersInput): Promise<UsersResponse> => {
+  const { page = 1, limit = 10, q, filters } = getUsersInput ?? {};
+  console.log(filters, q);
   try {
-    const { data } = await tesloApi.get<UsersResponse>('/user', {
+    const { data } = await comicApi.get<UsersResponse>('/user', {
       params: {
         limit,
         page,
+        q,
       },
     });
 

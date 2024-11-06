@@ -13,7 +13,7 @@
     <CustomErrorMessage :error="userUpdateMutation.error.value" />
 
     <div class="flex justify-end mt-6">
-      <CustomButton variant="secondary" @click="eventStore.emit('user-end-updating')"
+      <CustomButton variant="secondary" class="me-2" @click="eventStore.emit('user-end-updating')"
         >Cancelar</CustomButton
       >
 

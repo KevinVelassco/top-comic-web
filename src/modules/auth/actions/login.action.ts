@@ -1,39 +1,19 @@
-import { tesloApi } from '@/api/tesloApi';
-import type { AuthResponse, User } from '../interfaces';
-import { isAxiosError } from 'axios';
+import { comicApi } from '@/api/comicApi';
+import type { AuthResponse } from '../interfaces';
+import { getMessageFromError } from '@/modules/common/helpers';
 
-interface LoginError {
-  ok: false;
-  message: string;
+interface LoginAuthInput {
+  email: string;
+  password: string;
 }
 
-interface LoginSuccess {
-  ok: true;
-  user: User;
-  token: string;
-}
-
-export const loginAction = async (
-  email: string,
-  password: string,
-): Promise<LoginError | LoginSuccess> => {
+export const loginAction = async (loginAuthInput: LoginAuthInput): Promise<AuthResponse> => {
   try {
-    const { data } = await tesloApi.post<AuthResponse>('/auth/login', { email, password });
+    const { data } = await comicApi.post<AuthResponse>('/auth/login', loginAuthInput);
 
-    return {
-      ok: true,
-      user: data.user,
-      token: data.access_token,
-    };
+    return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 401) {
-      return {
-        ok: false,
-        message: 'Usuario o contraseña incorrectos',
-      };
-    }
-
     console.log(error);
-    throw new Error('No se pudo realizar la petición');
+    throw getMessageFromError(error);
   }
 };

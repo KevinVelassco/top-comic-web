@@ -1,29 +1,31 @@
 <template>
   <form @submit.prevent="onRegister">
-    <div class="mb-4">
-      <label class="block mb-2 text-gray-700">Nombre</label>
-      <CustomInput v-model="name" v-bind="nameAttrs" :error="errors.name" />
-    </div>
+    <CustomInput label="Nombre" v-model="name" v-bind="nameAttrs" :error="errors.name" />
 
-    <div class="mb-4">
-      <label class="block mb-2 text-gray-700">Apellido</label>
-      <CustomInput v-model="lastName" v-bind="lastNameAttrs" :error="errors.lastName" />
-    </div>
+    <CustomInput
+      label="Apellido"
+      v-model="lastName"
+      v-bind="lastNameAttrs"
+      :error="errors.lastName"
+    />
+    <CustomInput
+      label="Correo electrónico"
+      v-model="email"
+      v-bind="emailAttrs"
+      :error="errors.email"
+    />
 
-    <div class="mb-4">
-      <label class="block mb-2 text-gray-700">Correo electrónico</label>
-      <CustomInput v-model="email" v-bind="emailAttrs" :error="errors.email" />
-    </div>
-
-    <div class="mb-4">
-      <label class="block mb-2 text-gray-700">Contraseña</label>
-      <CustomInput v-model="password" v-bind="passwordAttrs" :error="errors.password" />
-    </div>
+    <CustomInput
+      label="Contraseña"
+      v-model="password"
+      v-bind="passwordAttrs"
+      :error="errors.password"
+    />
 
     <CustomErrorMessage :error="userCreateMutation.error.value" />
 
     <div class="flex justify-end mt-6">
-      <CustomButton variant="secondary" @click="eventStore.emit('user-end-creating')"
+      <CustomButton variant="secondary" class="me-2" @click="eventStore.emit('user-end-creating')"
         >Cancelar</CustomButton
       >
 

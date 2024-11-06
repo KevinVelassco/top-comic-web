@@ -5,4 +5,5 @@ export interface TableHeader {
   sortable?: boolean;
   visible?: boolean;
   size?: number;
+  filter?: boolean;
 }
